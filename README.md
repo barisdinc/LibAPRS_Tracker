@@ -25,9 +25,18 @@ LibAPRS_Tracker is a library for the Arduino IDE, that makes it easy to design a
 # Default definitions 
 D3 PTT Pin
 D4, D5, D6, D7 Audio generation PINs
-Destination HYMTR
-PATH1 WIDE1-1
-PATH2 WIDE2-1
+Destination : HYMTR
+PATH1 : WIDE1-1
+PATH2 : WIDE2-1
+Preamble : 350
+TX Tail : 100
+Symbol Table : /
+Symbol : > (car)
+Power : 10   (not used if > 10)
+Height : 10  (not used if > 10)
+Gain : 10    (not used if > 10)
+Directivity : 10 (not used if > 10)
+
 
 
 
