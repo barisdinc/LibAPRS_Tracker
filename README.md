@@ -12,7 +12,7 @@ So I decided to sanitize the LibAPRS for those who will use it for mini tracker 
 -
 -
 
-# Features taht does not exist
+# Features that does not exist
 - send messages over APRS
 - receive messages over APRS
 - receive and decode APRS messages
