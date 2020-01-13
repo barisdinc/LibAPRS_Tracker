@@ -4,11 +4,8 @@
 
 Afsk modem;
 AX25Ctx AX25;
-extern void aprs_msg_callback(struct AX25Msg *msg);
+//extern void aprs_msg_callback(struct AX25Msg *msg);
 #define countof(a) sizeof(a)/sizeof(a[0])
-
-int LibAPRS_vref = REF_3V3;
-bool LibAPRS_open_squelch = false;
 
 unsigned long custom_preamble = 350UL;
 unsigned long custom_tail = 50UL;
@@ -20,7 +17,7 @@ AX25Call path2;
 
 char CALL[7] = "NOCALL";
 int CALL_SSID = 0;
-char DST[7] = "APZMDM";
+char DST[7] = "HYMTR";
 int DST_SSID = 0;
 char PATH1[7] = "WIDE1";
 int PATH1_SSID = 1;
@@ -33,37 +30,18 @@ AX25Call path[4];
 char latitude[9];
 char longtitude[10];
 char symbolTable = '/';
-char symbol = 'n';
+char symbol = '>';
 
 uint8_t power = 10;
 uint8_t height = 10;
 uint8_t gain = 10;
 uint8_t directivity = 10;
-/////////////////////////
 
-// Message packet assembly fields
-char message_recip[7];
-int message_recip_ssid = -1;
-
-int message_seq = 0;
-char lastMessage[67];
-size_t lastMessageLen;
-bool message_autoAck = false;
-/////////////////////////
-
-void APRS_init(int reference, bool open_squelch) {
-    LibAPRS_vref = reference;
-    LibAPRS_open_squelch = open_squelch;
-
+void APRS_init() {
     AFSK_init(&modem);
-    ax25_init(&AX25, aprs_msg_callback);
+    ax25_init(&AX25);
 }
 
-/*
-void APRS_poll(void) {
-    ax25_poll(&AX25);
-}
-*/
 void APRS_setCallsign(char *call, int ssid) {
     memset(CALL, 0, 7);
     int i = 0;
@@ -103,7 +81,7 @@ void APRS_setPath2(char *call, int ssid) {
     }
     PATH2_SSID = ssid;
 }
-
+/*
 void APRS_setMessageDestination(char *call, int ssid) {
     memset(message_recip, 0, 7);
     int i = 0;
@@ -113,7 +91,7 @@ void APRS_setMessageDestination(char *call, int ssid) {
     }
     message_recip_ssid = ssid;
 }
-
+*/
 void APRS_setPreamble(unsigned long pre) {
     custom_preamble = pre;
 }
@@ -175,7 +153,7 @@ void APRS_setDirectivity(int s) {
         directivity = s;
     }
 }
-
+/*
 void APRS_printSettings() {
     Serial.println(F("LibAPRS Settings:"));
     Serial.print(F("Callsign:     ")); Serial.print(CALL); Serial.print(F("-")); Serial.println(CALL_SSID);
@@ -194,7 +172,7 @@ void APRS_printSettings() {
     Serial.print(F("Latitude:     ")); if (latitude[0] != 0) { Serial.println(latitude); } else { Serial.println(F("N/A")); }
     Serial.print(F("Longtitude:   ")); if (longtitude[0] != 0) { Serial.println(longtitude); } else { Serial.println(F("N/A")); }
 }
-
+*/
 void APRS_sendPkt(void *_buffer, size_t length) {
 
     uint8_t *buffer = (uint8_t *)_buffer;
@@ -255,7 +233,7 @@ void APRS_sendLoc(void *_buffer, size_t length) {
     APRS_sendPkt(packet, payloadLength);
     free(packet);
 }
-
+/*
 // Dynamic RAM usage of this function is 18 bytes
 void APRS_sendMsg(void *_buffer, size_t length) {
     if (length > 67) length = 67;
@@ -313,7 +291,7 @@ void APRS_msgRetry() {
     message_seq--;
     APRS_sendMsg(lastMessage, lastMessageLen);
 }
-
+*/
 // For getting free memory, from:
 // http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1213583720/15
 

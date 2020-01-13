@@ -8,12 +8,10 @@
 #include "AFSK.h"
 #include "AX25.h"
 
-void APRS_init(int reference, bool open_squelch);
-//void APRS_poll(void);
+void APRS_init();
 
 void APRS_setCallsign(char *call, int ssid);
 void APRS_setDestination(char *call, int ssid);
-void APRS_setMessageDestination(char *call, int ssid);
 void APRS_setPath1(char *call, int ssid);
 void APRS_setPath2(char *call, int ssid);
 
@@ -31,9 +29,5 @@ void APRS_setDirectivity(int s);
 
 void APRS_sendPkt(void *_buffer, size_t length);
 void APRS_sendLoc(void *_buffer, size_t length);
-void APRS_sendMsg(void *_buffer, size_t length);
-void APRS_msgRetry();
-
-void APRS_printSettings();
 
 int freeMemory();
