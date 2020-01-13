@@ -11,13 +11,10 @@
 #define countof(a) sizeof(a)/sizeof(a[0])
 #define MIN(a,b) ({ typeof(a) _a = (a); typeof(b) _b = (b); ((typeof(_a))((_a < _b) ? _a : _b)); })
 
-extern int LibAPRS_vref;
-
 void ax25_init(AX25Ctx *ctx) {
     memset(ctx, 0, sizeof(*ctx));
     ctx->crc_in = ctx->crc_out = CRC_CCIT_INIT_VAL;
 }
-
 
 static void ax25_putchar(AX25Ctx *ctx, uint8_t c)
 {

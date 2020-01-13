@@ -29,5 +29,3 @@ void APRS_setDirectivity(int s);
 
 void APRS_sendPkt(void *_buffer, size_t length);
 void APRS_sendLoc(void *_buffer, size_t length);
-
-int freeMemory();
