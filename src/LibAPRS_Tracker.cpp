@@ -36,9 +36,9 @@ uint8_t height = 10;
 uint8_t gain = 10;
 uint8_t directivity = 9;
 
-uint8_t speed = 0;
-uint8_t course = 0;
-uint8_t direction = 0;
+char speed[3];
+char course[3] ;
+char direction[3];
 
 void APRS_init() {
     AFSK_init(&modem);
@@ -149,19 +149,19 @@ void APRS_setDirectivity(int s) {
 
 void APRS_setSpeed(int s) {
     if (s >= 0 && s < 1000) {
-        speed = s;
+        snprintf(speed,3,"%03d",s) ;
     }
 }
 
 void APRS_setCourse(int s) {
     if (s >= 0 && s < 360) {
-        course = s;
+        snprintf(course,3,"%03d",s) ;
     }
 }
 
 void APRS_setDirection(int s) {
     if (s >= 0 && s < 360) {
-        direction = s;
+        snprintf(direction,3,"%03d",s) ;
     }
 }
 
@@ -185,11 +185,27 @@ void APRS_sendPkt(void *_buffer, size_t length) {
 }
 
 // Dynamic RAM usage of this function is 30 bytes
-void APRS_sendLoc(void *_buffer, size_t length) {
+void APRS_sendLoc(void *_buffer, size_t length, char packetType) {
     size_t payloadLength = 20+length;
     bool usePHG = false;
     bool useCSE = false;
     bool useDIR = false;
+    switch (packetType)
+    {
+    case ' ': //No extension to packet
+        break;
+    case 'p': //PHG
+        usePHG = true;
+        //break;
+    case 'c': // CSE/SPD
+        useCSE = true;
+    case 'd': // DIR/SPD
+        useDIR = true;
+    default:
+        payloadLength += 7;
+        break;
+    } 
+    /*
     if (power < 10 && height < 10 && gain < 10 && directivity < 9) {
         usePHG = true;
         payloadLength += 7;
@@ -202,7 +218,7 @@ void APRS_sendLoc(void *_buffer, size_t length) {
         useDIR = true;
         payloadLength += 7;
     }
-
+    */
     uint8_t *packet = (uint8_t*)malloc(payloadLength);
     uint8_t *ptr = packet;
     packet[0] = '=';
@@ -224,10 +240,24 @@ void APRS_sendLoc(void *_buffer, size_t length) {
         ptr+=7;
     }
     if (useCSE) {
-        //TODO: Buraya Course eklenecek
+        packet[20] = course[0];
+        packet[21] = course[1];
+        packet[22] = course[2];
+        packet[23] = '/';
+        packet[24] = speed[0];
+        packet[25] = speed[1];
+        packet[26] = speed[2];
+        ptr+=7;
     }
     if (useDIR) {
-        //TODO: Buraya Direction eklenecek
+        packet[20] = direction[0];
+        packet[21] = direction[1];
+        packet[22] = direction[2];
+        packet[23] = '/';
+        packet[24] = speed[0];
+        packet[25] = speed[1];
+        packet[26] = speed[2];
+        ptr+=7;
     }
     if (length > 0) {
         uint8_t *buffer = (uint8_t *)_buffer;
