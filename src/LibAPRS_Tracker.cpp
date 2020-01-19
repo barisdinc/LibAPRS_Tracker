@@ -34,7 +34,11 @@ char symbol = '>';
 uint8_t power = 10;
 uint8_t height = 10;
 uint8_t gain = 10;
-uint8_t directivity = 10;
+uint8_t directivity = 9;
+
+uint8_t speed = 0;
+uint8_t course = 0;
+uint8_t direction = 0;
 
 void APRS_init() {
     AFSK_init(&modem);
@@ -143,6 +147,24 @@ void APRS_setDirectivity(int s) {
     }
 }
 
+void APRS_setSpeed(int s) {
+    if (s >= 0 && s < 1000) {
+        speed = s;
+    }
+}
+
+void APRS_setCourse(int s) {
+    if (s >= 0 && s < 360) {
+        course = s;
+    }
+}
+
+void APRS_setDirection(int s) {
+    if (s >= 0 && s < 360) {
+        direction = s;
+    }
+}
+
 void APRS_sendPkt(void *_buffer, size_t length) {
     uint8_t *buffer = (uint8_t *)_buffer;
     memcpy(dst.call, DST, 6);
@@ -166,10 +188,21 @@ void APRS_sendPkt(void *_buffer, size_t length) {
 void APRS_sendLoc(void *_buffer, size_t length) {
     size_t payloadLength = 20+length;
     bool usePHG = false;
+    bool useCSE = false;
+    bool useDIR = false;
     if (power < 10 && height < 10 && gain < 10 && directivity < 9) {
         usePHG = true;
         payloadLength += 7;
     }
+    if (course > 0 && course < 1000 && speed > 0 && speed < 1000) {
+        useCSE = true;
+        payloadLength += 7;
+    }
+    if (direction > 0 && direction < 360 && speed > 0 && speed < 1000) {
+        useDIR = true;
+        payloadLength += 7;
+    }
+
     uint8_t *packet = (uint8_t*)malloc(payloadLength);
     uint8_t *ptr = packet;
     packet[0] = '=';
@@ -189,6 +222,12 @@ void APRS_sendLoc(void *_buffer, size_t length) {
         packet[25] = gain+48;
         packet[26] = directivity+48;
         ptr+=7;
+    }
+    if (useCSE) {
+        //TODO: Buraya Course eklenecek
+    }
+    if (useDIR) {
+        //TODO: Buraya Direction eklenecek
     }
     if (length > 0) {
         uint8_t *buffer = (uint8_t *)_buffer;
