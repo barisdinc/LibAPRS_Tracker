@@ -1,0 +1,22 @@
+{
+  "name": "LibAPRS_Tracker",
+  "keywords": "APRS, Tracker, GPS, Arduino, AX25",
+  "description": "This is nano minimal version of LibAPRS for tracker devices. design and implemet your own APRS Tracker devices for sending out your location, telemetry, etc",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/barisdinc/LibAPRS_Tracker.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Baris DINC",
+      "email": "barisdinc@gmail.com",
+      "url": "http://www.barisdinc.com.tr",
+      "maintainer": true
+    }
+  ],
+  "version": "0.5",
+  "frameworks": "arduino",
+  "platforms": "*"
+}
