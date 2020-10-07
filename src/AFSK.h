@@ -72,9 +72,9 @@ typedef struct Afsk
 #define AFSK_DAC_IRQ_START()   do { extern bool hw_afsk_dac_isr; hw_afsk_dac_isr = true; } while (0)
 #define AFSK_DAC_IRQ_STOP()    do { extern bool hw_afsk_dac_isr; hw_afsk_dac_isr = false; } while (0)
 #define AFSK_DAC_INIT()        do { DAC_DDR |= 0xF8; } while (0)
-#define LED_TX_INIT() do { LED_DDR |= _BV(1); } while (0)
-#define LED_TX_ON()   do { LED_PORT |= _BV(1); } while (0)
-#define LED_TX_OFF()  do { LED_PORT &= ~_BV(1); } while (0)
+#define LED_TX_INIT() do { LED_DDR |= _BV(5); } while (0)
+#define LED_TX_ON()   do { LED_PORT |= _BV(5); } while (0)
+#define LED_TX_OFF()  do { LED_PORT &= ~_BV(5); } while (0)
 
 void AFSK_init(Afsk *afsk);
 void AFSK_transmit(char *buffer, size_t size);
