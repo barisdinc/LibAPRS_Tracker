@@ -36,9 +36,9 @@ uint8_t height = 10;
 uint8_t gain = 10;
 uint8_t directivity = 9;
 
-char speed[3];
-char course[3] ;
-char direction[3];
+char speed[4];
+char course[4] ;
+char direction[4];
 
 void APRS_init() {
     AFSK_init(&modem);
@@ -149,19 +149,19 @@ void APRS_setDirectivity(int s) {
 
 void APRS_setSpeed(int s) {
     if (s >= 0 && s < 1000) {
-        snprintf(speed,3,"%03d",s) ;
+        snprintf(speed,4,"%03d",s) ;
     }
 }
 
 void APRS_setCourse(int s) {
     if (s >= 0 && s < 360) {
-        snprintf(course,3,"%03d",s) ;
+        snprintf(course,4,"%03d",s) ;
     }
 }
 
 void APRS_setDirection(int s) {
     if (s >= 0 && s < 360) {
-        snprintf(direction,3,"%03d",s) ;
+        snprintf(direction,4,"%03d",s) ;
     }
 }
 
@@ -196,12 +196,14 @@ void APRS_sendLoc(void *_buffer, size_t length, char packetType) {
         break;
     case 'p': //PHG
         usePHG = true;
-        //break;
+        payloadLength += 7;
+        break;
     case 'c': // CSE/SPD
         useCSE = true;
+        payloadLength += 7;
+        break;
     case 'd': // DIR/SPD
         useDIR = true;
-    default:
         payloadLength += 7;
         break;
     } 
@@ -263,7 +265,6 @@ void APRS_sendLoc(void *_buffer, size_t length, char packetType) {
         uint8_t *buffer = (uint8_t *)_buffer;
         memcpy(ptr, buffer, length);
     }
-
     APRS_sendPkt(packet, payloadLength);
     free(packet);
 }
